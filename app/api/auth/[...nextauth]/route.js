@@ -39,6 +39,7 @@ const options = {
     pages: {
         signIn: '/auth/login',
     },
+    secret: process.env.NEXTAUTH_SECRET || "SECRET_HERE",
 };
 
 const handler = NextAuth(options);
