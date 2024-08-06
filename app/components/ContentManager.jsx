@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef, useCallback} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents, addNewContent, updateExistingContent, deleteExistingContent } from '../store/contentSlice';
 import { initBroadcastChannel, getBroadcastChannel } from '../utils/broadcastChannel';
@@ -41,6 +41,11 @@ export function ContentManager() {
             editTextareaRef.current.focus();
         }
     }, [editingId]);
+
+    useEffect(() => {
+        setEditingId(null);
+        setEditingContent('');
+    }, [role]);
 
     async function handleFileUpload(e) {
         e.preventDefault();
@@ -92,7 +97,8 @@ export function ContentManager() {
         }
     }
 
-    const canModify = (content) => content.creator === user.role;
+    // const canModify = (content) => content.creator === user.role;
+    const canModify = useCallback((content) => content.creator === role, [role]);
 
     function announceUpload(fileName) {
         const message = `File ${fileName} has been uploaded successfully.`;
